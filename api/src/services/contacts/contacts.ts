@@ -1,5 +1,7 @@
 import type { QueryResolvers, MutationResolvers } from 'types/graphql'
 
+import { validate } from '@redwoodjs/api'
+
 import { db } from 'src/lib/db'
 
 export const contacts: QueryResolvers['contacts'] = () => {
@@ -15,6 +17,8 @@ export const contact: QueryResolvers['contact'] = ({ id }) => {
 export const createContact: MutationResolvers['createContact'] = ({
   input,
 }) => {
+  // Add validation here, since this is what actually writes to db
+  validate(input.email, 'email', { email: true })
   return db.contact.create({
     data: input,
   })
